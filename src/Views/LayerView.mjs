@@ -23,7 +23,7 @@ export class LayerView extends Container {
             if (event.target instanceof InteractionElementView) {
                 this.emit("differenceFound", event.target.id);
             } else {
-                
+                this.emit("error");
             }
         })
     }

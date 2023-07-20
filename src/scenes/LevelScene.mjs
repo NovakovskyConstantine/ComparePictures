@@ -13,6 +13,7 @@ export class LevelScene extends Container{
     _elapsedElements;
     _textElapsed;
     _textMistakes;
+    _mistakes;
     _nextLevelView;
 
     _app = app;
@@ -24,6 +25,7 @@ export class LevelScene extends Container{
         this._levelData = app.levelsData;
         this._levelData.setCurrentLevel(levelId);
         this._elapsedElements = this._levelData.currentLevel.images.length - 1;
+        this._mistakes = 0;
 
         this._init();
 
@@ -57,8 +59,11 @@ export class LevelScene extends Container{
     }
 
     _createInteractions() {
-        this._layerA.on("differenceFound", this._onDifferenceFound.bind(this))
-        this._layerB.on("differenceFound", this._onDifferenceFound.bind(this))
+        this._layerA.on("differenceFound", this._onDifferenceFound.bind(this));
+        this._layerB.on("differenceFound", this._onDifferenceFound.bind(this));
+
+        this._layerA.on("error", this._onError.bind(this));
+        this._layerB.on("error", this._onError.bind(this));
     }
 
     _onDifferenceFound(id) {
@@ -67,6 +72,11 @@ export class LevelScene extends Container{
         this._elapsedElements--;
         this._textElapsed.changeMiddleString(`${this._levelData.currentLevel.images.length - 1 - this._elapsedElements}`)
         this._checkComplete();
+    }
+
+    _onError() {
+        this._mistakes++;
+        this._textMistakes.changeMiddleString(this._mistakes);
     }
 
     _checkComplete() {
