@@ -91,11 +91,16 @@ export class LevelScene extends Container{
     _createNextLevelView() {
         this._nextLevelView = new NextLevelView();
         this.addChild(this._nextLevelView);
+        console.log(this._levelData)
         this._nextLevelView.on("toNextLevel", () => {
-            this._app.sceneManager.start("Level", +this._levelId + 1)
+            if (!this._levelData.levels[+this._levelId + 1]) {
+                this._app.sceneManager.start("SelectLevel");
+            } else {
+                this._app.sceneManager.start("Level", +this._levelId + 1)
+            }
         });
         this._nextLevelView.on("toMenu", () => {
-            this._app.sceneManager.start("SelectLevel")
+            this._app.sceneManager.start("SelectLevel");
         });
     }
 
