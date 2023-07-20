@@ -81,6 +81,7 @@ export class LevelScene extends Container{
 
     _checkComplete() {
         if (this._elapsedElements === 0) {
+            this._levelData.completeLevel();
             this._nextLevelView.visible = true;
         }
     }
