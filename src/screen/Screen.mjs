@@ -132,8 +132,9 @@ export class Screen extends utils.EventEmitter {
 	};
 
 	_calcSize() {
-		const windowWidth = window.outerWidth;
-		const windowHeight = window.outerHeight;
+		const windowWidth = window.innerWidth < window.outerWidth ? window.innerWidth : window.outerWidth;
+		const windowHeight = window.innerHeight < window.outerHeight ? window.innerHeight : window.outerHeight;
+		const ratio = windowWidth / windowHeight;
 
 		this._type = ScreenType.DEFAULT;
 
@@ -141,8 +142,20 @@ export class Screen extends utils.EventEmitter {
 
 		if (windowHeight > windowWidth) {
 			newOrientation = ScreenOrientation.VERTICAL;
+
+			if (ratio > 0.7) {
+				this._type = ScreenType.WIDE;
+			} else if (ratio < 0.5) {
+				this._type = ScreenType.NARROW;
+			}
 		} else {
 			newOrientation = ScreenOrientation.HORIZONTAL;
+
+			if (ratio < 1.4) {
+				this._type = ScreenType.WIDE;
+			} else if (ratio > 2) {
+				this._type = ScreenType.NARROW;
+			}
 		}
 
 		if (newOrientation !== this._orientation) {
